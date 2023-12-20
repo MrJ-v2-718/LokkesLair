@@ -1,0 +1,5 @@
+We are given the hexadecimal number 0x3d and told to convert it to decimal
+I bust out gnome calculator and switch to programming mode
+Then I type 0x3d and it shows that base 10 of 0x3d is 61
+Flag: picoCTF{61}
+
