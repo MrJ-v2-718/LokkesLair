@@ -1,0 +1,4 @@
+The goal is to obtain the password for this program. This is quite simple because 
+the password is contained in the source code, which we have in our possesion.
+Flag: picoCTF{w4rm1ng_Up_w1tH_jAv4_eec0716b713}
+

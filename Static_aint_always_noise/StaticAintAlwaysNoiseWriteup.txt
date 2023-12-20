@@ -1,0 +1,20 @@
+I am provided with two files, 'static' and ltdis.sh
+I run static with ./static and get:
+Oh hai! Wait what? A flag? Yes, it's around here somewhere!
+
+When I try to run ./ltdis.sh I get:
+Attempting disassembly of  ...
+objdump: 'a.out': No such file
+objdump: section '.text' mentioned in a -j option, but not found in any input file
+Disassembly failed!
+Usage: ltdis.sh <program-file>
+Bye!
+
+I see that the usage requires a program file to be parsed as an option so I try:
+./ltdis.sh static
+
+This generates static.ltdis.strings.txt
+
+I ctrl + F 'pico' through it to find the flag:
+picoCTF{d15a5m_t34s3r_ae0b3ef2}
+

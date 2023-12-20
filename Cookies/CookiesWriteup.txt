@@ -1,0 +1,8 @@
+Navigated to site and used ctrl + shift + I to switch to
+inspection view. Since were looking for cookies, I navigated to
+storage and found one cookie with a value of zero. Changing
+this value leads to changes in the page once refreshed. 1 is
+"I love chocolate chip cookies!" and continues professing it's love
+for different cookies until 18 which drops the flag in the format:
+picoCTF{3v3ry1_l0v3s_c00k135_XXXXXXXX}
+

@@ -1,0 +1,23 @@
+I am given:
+
+Matryoshka dolls are a set of wooden dolls of decreasing size placed one
+inside another. What's the final one? Image: this
+
+1. Wait, you can hide files inside files? But how do you find them?
+2. Make sure to submit the flag as picoCTF{XXXXX}
+
+I found this sweet video abouts hiding files, in files, in files, in files:
+
+https://www.youtube.com/watch?v=KUZVIBXfoeA
+
+Time to bust out the handy-dandy hex editor, ghex is my buddy.
+
+Searched for IEND and snagged from PK to the end of the file and made a new file with it,
+unzipped it, opened in hex, searched for IEND and snagged from PK to the end of the file and 
+made a new file with it, unzipped it, opened in hex, searched for IEND and snagged from...
+
+Then bam, flag.txt. You can try and read it in a text editor and go perma cross-eyed
+or just cat it in the terminal for the flag:
+
+picoCTF{bf6acf878dcbd752f4721e41b1b1b66b}
+

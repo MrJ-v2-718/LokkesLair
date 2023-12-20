@@ -1,0 +1,5 @@
+Used wget to download 'garden.jpg' from the source url
+The hint mentions a hex editor so I bust out ghex
+Searched for picoCTF in hex editor and found:
+picoCTF{more_than_m33ts_the_3y3657BaB2C}
+

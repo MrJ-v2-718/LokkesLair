@@ -1,0 +1,15 @@
+Used wget to download index.html from the url provided.
+After using cat to inspect the code in the terminal I noticed
+picoCTF{tru3_d3 -->
+With the annotation that this was 1/3 of the flag.
+
+After inspecting the mycss.css I found:
+/* You need CSS to make pretty pages. Here's part 2/3 of the flag: t3ct1ve_0r_ju5t */
+
+After inspecting myjs.js I found:
+/* Javascript sure is neat. Anyways part 3/3 of the flag: _lucky?832b0699} */
+
+Flag: picoCTF{tru3_d3t3ct1ve_0r_ju5t_lucky?832b0699}
+
+A true detective indeed.
+

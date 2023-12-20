@@ -1,0 +1,35 @@
+First I use netcat to connect to the attached service:
+
+nc mercury.picoctf.net 11188
+
+I am given an encrypted flag and asked what data I would like to encrypt.
+
+To analyze the software under the hood I use a download manager:
+
+wget mercury.picoctf.net 11188
+
+I get otp.py and find that it uses a XOR pad of length 50000 to encrypt the input.
+This would usually be unbreakable if it was a one-time-pad, but the service
+performs a wrap-around and reuses the same pad for every 50000 characters.
+To get the XOR values used to encrypt the flag, we need to cause said wrap-around.
+
+I was clueless, so the script used is complements of sf_CTFs:
+solve.py
+
+Right off the bat I notice an import that looks greek:
+from pwn import *
+
+After some digging I found it was a module in python called PWNTOOLS, and is a CTF toolkit:
+https://pypi.org/project/pwntools/
+*que installation montage with inspirational music*
+
+"To retrieve the XOR values used to encrypt the ﬂag, we just need to cause a wraparound,
+allowing our known input to be re-encrypted with the same XOR values. Since we know the input, 
+we can XOR it with the encrypted result to get the key. Then, it's just a matter of XOR-ing the 
+key with the encrypted ﬂag"
+or so he says...
+
+I tweaked the script to match my port and solve.py takes the encrypted flag and re-encrypts
+it using the same XOR stream which is the decrypted flag:
+picoCTF{7904ff830f1c5bba8f763707247ba3e1}
+

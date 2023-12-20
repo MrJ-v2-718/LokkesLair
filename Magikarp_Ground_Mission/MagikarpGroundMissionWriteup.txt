@@ -1,0 +1,30 @@
+I connect to the server with the command:
+
+ssh ctf-player@venus.pcioctf.net -p 50713 and use the password provided, 6d448c9c.
+
+Using ls lists the first of three flags in a text file 1of3.flag.txt:
+
+picoCTF{xxsh_
+
+next I:
+
+cat instructions-to-2of3.txt 
+
+which instructs me to go to the root of all things.
+
+I use:
+
+cd ..
+
+To go back a directory and:
+
+cat 3of3.flag.txt
+
+which gives me the tail end of the flag. I keep reverse tunneling until I find 2of3:
+
+0ut_0f_\/\/4t3r_
+
+By my superpowers of deduction I somehow manage to assemble them:
+
+picoCTF{xxsh_0ut_0f_\/\/4t3r_540e4e79}
+

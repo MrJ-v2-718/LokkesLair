@@ -1,0 +1,9 @@
+picoCTF
+GET aHEAD (20 points)
+11/23/2023
+
+Used Burp Suite to modify an HTTP request from GET to HEAD using Proxy > Intercept
+
+Analyzed the response using Target > Site Map to capture the flag:
+picoCTF{r3j3ct_th3_du4l1ty_70bc61c4}
+

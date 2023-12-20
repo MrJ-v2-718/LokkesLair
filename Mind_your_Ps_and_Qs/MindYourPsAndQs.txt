@@ -1,0 +1,25 @@
+Mind your Ps and Qs
+Description:
+In RSA, a small e value can be problematic, but what about N? Can you decrypt this? values
+
+Hints
+Bits are expensive, I used only a little bit over 100 to save money
+
+Contents of values:
+Decrypt my super sick RSA:
+c: 421345306292040663864066688931456845278496274597031632020995583473619804626233684
+n: 631371953793368771804570727896887140714495090919073481680274581226742748040342637
+
+The RSA standard for e is 65537
+e:65537
+
+Ran N through factorial calculator to find Euler's totient(phi) which is:
+Euler's totient: 631371953793368771804570727896887140714061729769155038068711341335911329840163136
+
+Input values into RsaDecrypt.java:
+}49540355_do0g_0n_N_11ams{FTCocip
+
+Looks like the flag is reversed. Let's flip it with Python.
+reverse.py output:
+picoCTF{sma11_N_n0_g0od_55304594}
+

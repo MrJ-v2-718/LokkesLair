@@ -1,0 +1,19 @@
+I use wget to snag dat file and lo and behold, there's no file extension.
+Opened it up in my favorite hex editor, ghex, and the first two characters are BM,
+which indicates a BMP file, not a bowel movement. Weird...
+
+Changed extension to bmp and it still doesn't open, so I install ImageMagick:
+
+sudo apt install imagemagick
+
+After opening I notice it looks super cramped and weirdly sized.
+The picture is adorned with the characters "notaflag{sorry}"
+This site explains bmp stuffs:
+https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm
+
+After some "light" reading, I found that height on a BMP file starts at offset 0016h, so I changed 
+0017h from 0x01 to 0x03. Fun fact: altering RAFT saves and solving this puzzle have a lot in common.
+Who would have thought?
+
+Flag: picoCTF{qu1t3_a_v13w_2020}
+

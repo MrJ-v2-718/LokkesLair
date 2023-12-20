@@ -1,0 +1,11 @@
+Used wget to download png from source
+The png appears to be a picture of numbers in flag format
+
+Using picoCTF{ as the lexicon, the numbers appear 
+to be the number of the letter of the alphabet
+
+Created python program to transcribe numbers to letters
+and recovered 'picoctfthenumbersmason'
+
+Flag: picoCTF{thenumbersmason}
+

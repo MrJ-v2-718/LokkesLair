@@ -1,0 +1,115 @@
+I used wget to snag keygenme-trial.py
+
+Found this in the source:
+
+key_part_static1_trial = "picoCTF{1n_7h3_|<3y_of_"
+key_part_dynamic1_trial = "xxxxxxxx"
+key_part_static2_trial = "}"
+key_full_template_trial = key_part_static1_trial + key_part_dynamic1_trial + key_part_static2_trial
+
+Looking for the word key you find:
+
+def enter_license():
+    user_key = input("\nEnter your license key: ")
+    user_key = user_key.strip()
+
+    global bUsername_trial
+    
+    if check_key(user_key, bUsername_trial):
+        decrypt_full_version(user_key)
+    else:
+        print("\nKey is NOT VALID. Check your data entry.\n\n")
+
+Looks like if check_key(user_key, bUsername_trial) returns true, it will lead
+to the flag. Let's check out check_key:
+
+def check_key(key, username_trial):
+
+    global key_full_template_trial
+	
+	# This tells us that the key is the same length as
+	# picoCTF{1n_7h3_|<3y_of_xxxxxxxx}
+    if len(key) != len(key_full_template_trial):
+        return False
+    else:
+        # Check static base key part --v
+        i = 0
+        for c in key_part_static1_trial:
+            if key[i] != c:
+                return False
+
+            i += 1
+
+Found an untested toolbox container in the form of eight if statements, I bet
+these spit out the last eight characters of the flag.
+
+# TODO : test performance on toolbox container
+        # Check dynamic part --v
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[5]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[3]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[6]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[2]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[7]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[1]:
+            return False
+        else:
+            i += 1
+
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[8]:
+            return False
+
+
+
+        return True
+
+Modifications:
+
+# Modification made to program to output flag
+print(hashlib.sha256(bUsername_trial).hexdigest()[4])
+print(hashlib.sha256(bUsername_trial).hexdigest()[5])
+print(hashlib.sha256(bUsername_trial).hexdigest()[3])
+print(hashlib.sha256(bUsername_trial).hexdigest()[6])
+print(hashlib.sha256(bUsername_trial).hexdigest()[2])
+print(hashlib.sha256(bUsername_trial).hexdigest()[7])
+print(hashlib.sha256(bUsername_trial).hexdigest()[1])
+print(hashlib.sha256(bUsername_trial).hexdigest()[8])
+
+Which gives us:
+
+0
+1
+5
+8
+2
+4
+1
+9
+
+For the flag:
+picoCTF{1n_7h3_|<3y_of_01582419}
+

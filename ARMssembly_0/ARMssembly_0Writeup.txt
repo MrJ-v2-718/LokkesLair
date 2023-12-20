@@ -1,0 +1,31 @@
+We are given a .S file, which is all assembly and specifies
+an armv8-a architecture. To compile and execute this code
+I had to install a cross-compiler:
+
+sudo apt install binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu
+Then I can compile:
+
+aarch64-linux-gnu-as -o chall.o chall.S
+aarch64-linux-gnu-gcc -static -o chall chall.o
+
+If I run 'file chall' I get:
+ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked
+
+To run chall, we need an ARMv8 environment. I use QEMU, a VM.
+To avoid spinning up a seperate VM since I'm already in one, I install it
+to run in the background with the command:
+
+sudo apt install qemu-user-static
+
+Then I can run chall with the specified integers with:
+
+./chall 4112417903 1169092511
+Result: 4112417903
+
+Convert to hexadecimal:
+    Decimal: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Hexadecimal: 0 1 2 3 4 5 6 7 8 9 A  B  C  D  E  F
+
+Using GNOME Programming Calculator:
+picoCTF{F51E846F}
+

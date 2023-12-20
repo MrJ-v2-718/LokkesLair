@@ -1,0 +1,7 @@
+I use wget to snag Addadshashanammu.zip and unzip in terminal
+I use cd and ls to tunnel...and tunnel...and tunnel...
+until I find fang-of-haynekhtnamet, an ELF file.
+I run it with ./fang-of-haynekhtnamet and it outputs:
+
+*ZAP!* picoCTF{l3v3l_up!_t4k3_4_r35t!_a00cae70}
+

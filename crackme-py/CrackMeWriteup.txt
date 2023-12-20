@@ -1,0 +1,17 @@
+I use wget to snag crackme.py
+
+After analyzing the program, I notice:
+
+# Hiding this really important number in an obscure piece of code is brilliant!
+# AND it's encrypted!
+# We want our biggest client to know his information is safe with us.
+bezos_cc_secret = "A:4@r%uL`M-^M0c0AbcM-MFE02fh3e4a5N"
+
+There is a built in decode_secret method, but it is never called. I added a call:
+
+decode_secret(bezos_cc_secret)
+
+I run it and bam:
+
+picoCTF{1|\/|_4_p34|\|ut_a79b6c2d}
+
