@@ -1,0 +1,9 @@
+We are asked to conver the number 42 (base 10) to binary (base 2)
+
+___ __ __ __ __ __ __ __
+128 64 32 16 8  4  2  1
+
+Used this chart to get 00101010
+Flag: picoCTF{101010} 
+(it didn't like the leading zeroes)
+

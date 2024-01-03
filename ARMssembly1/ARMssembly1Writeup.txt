@@ -1,0 +1,225 @@
+ARMssembly 1
+70 points
+
+Author: Pranay Garg
+Description
+For what argument does this program print `win` with variables 81, 0 and 3? 
+File: chall_1.S Flag format: picoCTF{XXXXXXXX} -> (hex, lowercase, no 0x, and 32 bits. 
+ex. 5614267 would be picoCTF{0055aabb})
+
+Hints
+Shifts
+
+We are given a .S file, which is all assembly and specifies
+an armv8-a architecture. To compile and execute this code
+I had to install a cross-compiler:
+
+sudo apt install binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu
+Then I can compile:
+
+aarch64-linux-gnu-as -o chall_1.o chall_1.S
+aarch64-linux-gnu-gcc -static -o chall_1 chall_1.o
+
+If I run 'file chall_1' I get:
+ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked
+
+To run chall, we need an ARMv8 environment. I use QEMU, a VM.
+To avoid spinning up a seperate VM since I'm already in one, I install it
+to run in the background with the command:
+
+sudo apt install qemu-user-static
+
+Then I can run chall with:
+./chall_1
+qemu: uncaught target signal 11 (Segmentation fault) - core dumped
+Segmentation fault (core dumped)
+
+To the web! Looks like I need a dissassembler, snagged IDA from Hex Rays:
+chmod +x idafree83_linux.run
+./idafree83_linux.run
+*Install Montage*
+
+Welp, I installed the free version and got all good and ready to dissassemble ARM,
+only to find out that the free version doesn't support ARM. Let's try Ghidra,
+developed by the hipsters over at the NSA.
+https://github.com/NationalSecurityAgency/ghidra/releases
+SHA256 Checksum on their GitHub:
+f1f240f91cf6b1dffc9a4148384ee3c6b269a8ae27c6f981577973e00043ad94
+Local:
+f1f240f91cf6b1dffc9a4148384ee3c6b269a8ae27c6f981577973e00043ad94  
+ghidra_11.0_PUBLIC_20231222.zip
+
+I can't get it to work for the life of me. Installed the jdk it wanted "17" and set it to run in foreground
+Looks like I have to learn Arm Assembly.
+cat chall_1.S gives:
+// Not sure how to annotate comments in Assembly cause I don't know it so this is it now -> //
+// Look at me....I am the captain now. Anyway, we're looking for 81, 0, 3 and a win.
+	// BTW, I can't believe I have to learn this,
+	// all because IDA Free sucks and I couldn't get GHIDRA to work.
+	// It's kinda fun tho, look at this crazy stuffs.
+
+	.arch armv8-a
+	.file	"chall_1.c"
+	.text
+	.align	2
+	.global	func
+	.type	func, %function
+func:
+	// These things are called stores
+	sub	sp, sp, #32
+	str	w0, [sp, 12]  // Input stored on stack at offset 12. Stacks, like pancakes, pop from top.
+	mov	w0, 81        // 81 gets moved into register w0
+	str	w0, [sp, 16]  // register w0 is stored on stack at offset 16
+	str	wzr, [sp, 20] // Wn 4 byte general register, or WZR
+	mov	w0, 3         // 3 gets moved into register w0
+	str	w0, [sp, 24]  // register w0 is stored on stack at offset 24
+	ldr	w0, [sp, 20]  // loads register w0 at offset 20
+	ldr	w1, [sp, 16]  // loads register w1 at offset 16
+	lsl	w0, w1, w0 // This is a logical shift left and store, the w0 register is how much to shift?
+	str	w0, [sp, 28]
+// shift the value in w1(81) by w0(3) and store in w0
+// 81 in binary = 01010001
+// 1010001000
+// 648 in decimal is the result of the bit shift, Jesus give me strength.
+	
+/* A demonstration of the bit shift:
+
+12 in binary is 00001100 (padded to 8bits)
+
+now 00001100 << 2 (logical left shift 2)
+
+take 00001100 move it two bits to the left like so:
+
+00001100 << 2 = 00110000 
+
+Convert to decimal = 48
+
+*/
+LDR loads a 32-bit constant (LDRH (halfword): 16 bit, 
+LDRB (byte): 8 bit) from memory into the specified target register (r0 in your example).
+
+	ldr	w1, [sp, 28] // loads value at offset 28 into register w1
+	ldr	w0, [sp, 24] // loads value at offset 24 into register w0
+	sdiv	w0, w1, w0  // w0 = w1 / w0
+	str	w0, [sp, 28] // stores value at offset 28 into register w0
+// So 648 / 3 = 216
+// Convert 216 to hex and make it 32 bits
+// Okay, now we take a minute to unpack some of this stuff.
+// stack + 12 = user input
+// stack + 16 = 81
+// stack + 24 = 3
+// stack + 28 = 0
+
+// BTW, I'm going with my gut interpreting this pdf I found on ARMv8 A64
+// Now we kind of know the rough location of everything on the stack.
+	ldr	w1, [sp, 28] // Loads 0 into w1
+	ldr	w0, [sp, 12] // Loads user input into w0
+	sub	w0, w1, w0   // w0 = w1 - w0
+	str	w0, [sp, 28] // Stores the result at offset 28
+// So let's unwrap what this implies.
+// w0 at Offset 28 = 0 - user_input
+
+// Let's move on to this:
+	ldr	w0, [sp, 28] // Loads the previous result into w0 at offset 28
+	add	sp, sp, 32 // sp = sp + 32
+	
+	
+	ret
+	.size	func, .-func
+	.section	.rodata
+	.align	3	
+.LC0:
+	.string	"You win!" // I win? Yay, I won! Oh, wait.
+	.align	3
+.LC1:
+	.string	"You Lose :("
+	.text
+	.align	2
+	.global	main
+	.type	main, %function
+main:
+	stp	x29, x30, [sp, -48]!
+	add	x29, sp, 0
+	str	w0, [x29, 28]
+	str	x1, [x29, 16]
+	ldr	x0, [x29, 16]
+	add	x0, x0, 8
+	ldr	x0, [x0]
+	bl	atoi
+	str	w0, [x29, 44]
+	ldr	w0, [x29, 44]
+	bl	func
+	cmp	w0, 0 // We want w0 to be 0 so it branches to .L0 which is the winner!
+	bne	.L4
+	adrp	x0, .LC0
+	add	x0, x0, :lo12:.LC0
+	bl	puts
+	b	.L6
+.L4:
+	adrp	x0, .LC1
+	add	x0, x0, :lo12:.LC1
+	bl	puts
+.L6:
+	nop
+	ldp	x29, x30, [sp], 48
+	ret
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0"
+	.section	.note.GNU-stack,"",@progbits
+
+// Convert 216 to hex and make it 32 bits
+11011000 = 216
+Convert to hexadecimal:
+    Decimal: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Hexadecimal: 0 1 2 3 4 5 6 7 8 9 A  B  C  D  E  F
+
+Using GNOME Programming Calculator:
+picoCTF{000000d8}
+
+Guess what. 
+That flag. 
+It didn't work. 
+I'm moving on. 
+To greener pastures.
+Bluer shores.
+Anything Else.
+Ugh.
+I'm gonna play video games.
+aaaaaaand I'm back. Let's do this.
+I was recharged by the power of anime.
+Hmmm. Maybe time to try GHIDRA again. This is hard.
+Yay, I finally got it working!! I didn't have java installed, I'm such an id10t ;P
+
+Found the main function:
+
+int main(undefined8 param_1,long param_2)
+
+{
+  int iVar1;
+  
+  iVar1 = atoi(*(char **)(param_2 + 8));
+  iVar1 = func(iVar1); // Looks essential, lets check out func()
+  if (iVar1 == 0) {
+    iVar1 = puts("You win!");
+  }
+  else {
+    iVar1 = puts("You Lose :(");
+  }
+  return iVar1;
+}
+
+Here's the goods: 0x1b(27) which is the flag.
+
+int func(int param_1)
+
+{
+  return 0x1b - param_1;
+}
+
+Just to be sure I run:
+./chall_1 27
+Result:
+You Win!
+
+Flag: picoCTF{0000001b}
+

@@ -1,0 +1,16 @@
+There is something on my shop network running at 
+nc mercury.picoctf.net 33596
+but I can't tell what it is. Can you?
+
+Hint: What language does a CNC machine use?
+My search engine says G-code and the feed matches it's description
+G-code files have a .gcode extension
+
+Connected to port using netcat and sent results to txt file:
+
+nc mercury.picoctf.net 33596 > SeedsAndFeeds.gcode
+
+https://ncviewer.com/ is an online .gcode viewer and I opened up the file
+to find the flag in plain sight. Snagged a screenshot
+Flag: picoCTF{num3r1cal_c0ntr0l_e7749028}
+

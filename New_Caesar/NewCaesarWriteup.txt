@@ -1,0 +1,125 @@
+New Caesar
+60 points
+
+Author: madStacks
+Description
+We found a brand new type of encryption, can you break the secret code? (Wrap with picoCTF{}) 
+apbopjbobpnjpjnmnnnmnlnbamnpnononpnaaaamnlnkapndnkncamnpapncnbannaapncndnlnpna new_caesar.py
+Hints
+How does the cipher work if the alphabet isn't 26 letters?
+Even though the letters are split up, the same paradigms still apply
+
+Okay, so I'm familiar with a type of code that originates from the time of Caesar, I think it's ROT13
+You rotate the cylinder 13 characters to get the encoded form, and revert 13 to get decoded form.
+Normally, in a 26 letter alphabet, the same function can be used to encode/decode 'cause 13/26 == 1/2 is true.
+But we're given an abnormal alphabet:
+apbopjbobpnjpjnmnnnmnlnbamnpnononpnaaaamnlnkapndnkncamnpapncnbannaapncndnlnpna
+78 characters by my count, ROT13[3] by three orders of magnitude
+
+and a python file:
+new_caesar.py
+
+Let's snag and cat the python file:
+wget https://mercury.picoctf.net/static/d8a6722e08659449dd091668c0c9bbca/new_caesar.py
+cat new_caesar.py
+
+import string
+
+LOWERCASE_OFFSET = ord("a")
+ALPHABET = string.ascii_lowercase[:16]
+
+def b16_encode(plain):
+	enc = ""
+	for c in plain:
+		binary = "{0:08b}".format(ord(c))
+		enc += ALPHABET[int(binary[:4], 2)]
+		enc += ALPHABET[int(binary[4:], 2)]
+	return enc
+
+def shift(c, k):
+	t1 = ord(c) - LOWERCASE_OFFSET
+	t2 = ord(k) - LOWERCASE_OFFSET
+	return ALPHABET[(t1 + t2) % len(ALPHABET)]
+
+flag = "redacted"
+key = "redacted"
+assert all([k in ALPHABET for k in key])
+assert len(key) == 1
+
+b16 = b16_encode(flag)
+enc = ""
+for i, c in enumerate(b16):
+	enc += shift(c, key[i % len(key)])
+print(enc)
+
+Played around with the b16_encode function in PyCharm:
+
+import string
+
+LOWERCASE_OFFSET = ord("a")
+ALPHABET = string.ascii_lowercase[:16]
+plain_text = input("Please enter text to encode: ")
+
+
+def b16_encode(plain):
+    enc = ""
+    for c in plain:
+        binary = "{0:08b}".format(ord(c))
+        enc += ALPHABET[int(binary[:4], 2)]
+        enc += ALPHABET[int(binary[4:], 2)]
+    return enc
+
+
+print(b16_encode(plain_text))
+
+a = gb
+b = gc
+c = gd
+d = ge
+ab = gbgc
+
+It appears to annotate a lowercase g and the next letter in the alphabet, interesting.
+
+Next let's look at the redacted stuff:
+ALPHABET = string.ascii_lowercase[:16] # So only the first 16 letters of the alphabet
+flag = "redacted"
+key = "redacted"
+assert all([k in ALPHABET for k in key])
+assert len(key) == 1 # the key has a length of one character
+
+With this new intel it's back to PyCharm for more tinkering, brb.
+So I hit a wall and found another solve on the web:
+Ran the script for:
+ùÙùÜÝÜÛÑ
+        ßÞÞßÐ
+             ÛÚÓÚÒ
+ÐÒÓÛßÐ            ßÒÑ
+ÈèËÌËÊÀûÎÍÍÎÏÿûÊÉþÂÉÁûÎþÁÀüÏþÁÂÊÎÏ
+íü×üý·×º»º¹¿ê½¼¼½¾îê¹¸í±¸°ê½í°¿ë¾í°±¹½¾
+ÜëÆëì¦Æ©ª©¨®Ù¬««¬­ÝÙ¨§Ü §¯Ù¬Ü¯®Ú­Ü¯ ¨¬­
+ËÚµÚÛµÌÈËË
+ºÉ¤ÉÊ
+©¸¸¹svwvu{¦yxxyzª¦ut©}t|¦y©|{§z©|}uyz
+§¨befedjhgghidchiqQqTUTSY
+                         WVVWX
+                              SR[RZ
+                                   WZY
+XZ[SWX
+v
+`
+@`CDCBHsFEEFGwsBAvJAIsFvIHtGvIJBFG
+et_tu?_23217b54456fb10e908b5e87c6e89156
+TcNcd.N!"! &Q$##$%UQ /T(/'Q$T'&R%T'( $%
+CR=RS=@D@C@CAC
+2A,AB
+?202 ,?3?
+!01ûÿþýó.ñððñò".ýü!õüô.ñ!ôó/ò!ôõýñò
+/
+/ ê
+íîíìâàïïàáìëäëãàãâáãäìàá
+
+Looks like this one sucks haha, found some other solver.
+Flag: picoCTF{et_tu?_23217b54456fb10e908b5e87c6e89156}
+
+Not gonna lie, a lot of this was over my head coding-wise. Need to study python moar.
+

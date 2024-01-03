@@ -1,0 +1,11 @@
+It gives me what I assume to be a Wireshark file, from you know...the title.
+I've never used it but I've heard of it so Imma download it
+Looks greek.
+Found some stuff on the interwebs about this CTF cause im a cheater
+Apparently I need to follow the TCP stream so I did and sorted through them
+until I found something that resembled a flag
+cvpbPGS{c33xno00_1_f33_h_qrnqorrs}
+ROT13 bb
+made a script to decode, rot13.py
+Flag: picoCTF{p33kab00_1_s33_u_deadbeef}
+
