@@ -1,0 +1,26 @@
+Some Assembly Required 1
+70 points
+
+Author: Sears Schulz
+Description
+http://mercury.picoctf.net:40226/index.html
+
+Hints
+(None)
+
+First, I traveled to the link provided:
+http://mercury.picoctf.net:40226/index.html
+
+Here I was greeted with an input box with a prompt to enter the flag.
+
+I used wget to download the index.html file and noticed a javascript file, indicated by the .js extension. I downloaded it and was able to identify a
+few functions, but I don't know JavaScript so I searched for previous writeups.
+
+After some research, it was revealed that this constant declaration has a path included, indicated by the ./ preceding it.
+const _0x402c=['value','2wfTpTR','instantiate','275341bEPcme','innerHTML','1195047NznhZg','1qfevql','input','1699808QuoWhA','Correct!','check_flag','Incorrect!','./JIFxzHyW8W','23SMpAuA','802698XOMSrr','charCodeAt','474547vVoGDO','getElementById','instance','copy_char','43591XxcWUl','504454llVtzW','arrayBuffer','2NIQmVj','result'];
+
+I tried the path provided as a url in place of index.html
+http://mercury.picoctf.net:40226/JIFxzHyW8W
+which gave me a file with the flag at the end.
+
+picoCTF{cb688c00b5a2ede7eaedcae883735759}
