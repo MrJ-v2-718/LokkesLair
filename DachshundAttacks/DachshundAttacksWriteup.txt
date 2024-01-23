@@ -1,0 +1,63 @@
+Dachshund Attacks
+80 points
+
+Author: Sara
+Description
+What if d is too small? Connect with nc mercury.picoctf.net 37455.
+
+Hints
+What do you think about my pet? dachshund.jpg
+
+First things first, I need that picture of a dachshund so I use wget to download:
+wget https://mercury.picoctf.net/static/169e308c502d8b0fde11bb2e98e463cb/dachshund.jpg
+It is as cute as I thought it would be. Even if I can't solve this, it was worth it now.
+Those stubby little legs, the regal demeanor, the short and manageable coat. A good dog indeed.
+
+Let's look at it in a hex editor, my go to is ghex but you can use any you like:
+sudo apt install ghex
+
+This caught my eye:
+	Phttp://ns.adobe.com/xap/1.0/
+
+Now, let's connect with netcat:
+nc mercury.picoctf.net 37455
+
+I am greeted with:
+
+Welcome to my RSA challenge!
+e: 10322114426883462554486907340701845523947503700504371203874028962206583419251499073818349663912298361258721194767152266075996204103908425126179998561673046791095223680724021711086831038184752596658665089753708494004748110669651804858735594714017114877168140381396984086593489015497701638593794113790495616947
+n: 117447904595494123761911481939659542497352288059169658183478597767909753476447699855667528352007747067166548569600335630735682485825974210371844281482933910976482918345746076362962630460545288504190431640482723599441619032335150768123357311081890162850447057560780097550630949533277489984687759955710064126861
+c: 44587991190718747954090173889954147758999308175609037839916203203828181948818818582617399710079114775848282614541951603753856710152303024387348287779840178622265418005045329725636388032233088337320513353874637917501412232956898880796846288812972336623034804248937518433464768861485319823157947392360577216746
+
+Looks like another RSA challenge and we're given e, n, and c.
+
+After some research on previous writeups it seems that there is a type of RSA attack called "Wiener's Attack"
+and it occurs when "d" is too small as it says in the challenge.
+https://en.wikipedia.org/wiki/Wiener%27s_attack
+
+There is a readily available Weiner Attack Implementation in Python3 called oWiener
+
+I install with the command:
+pip install owiener
+
+I use the example provided on pypi to make my own solution script.
+It didn't run because pip didn't complete the installation properly, let's try curl
+
+Install curl with:
+sudo apt install curl
+
+Then owiener with:
+curl -O https://raw.githubusercontent.com/orisano/owiener/master/owiener.py
+
+Ran the program to receive the hacked d as well as the decrypted message in decimal format.
+Hacked d=8099868649823267453558366988941117570498435659123432543094497886711760130075
+Decrypted message:  198614235373674103788888306985643587194108045477674049828439422174745801853
+
+Let's convert to hex:
+7069636F4354467B70726F76696E675F7769656E65725F333837383637347D
+
+For the flag:
+picoCTF{proving_wiener_3878674}
+
+Thanks to Nao Yonashiro for owiener :)
+
