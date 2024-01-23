@@ -1,0 +1,49 @@
+Mini RSA
+70 points
+
+Author: Sara
+Description
+What happens if you have a small exponent? There is a twist though, we padded the plaintext 
+so that (M ** e) is just barely larger than N. Let's decrypt this: ciphertext
+
+Hints
+RSA tutorial
+How could having too small of an e affect the security of this key?
+Make sure you don't lose precision, the numbers are pretty big (besides the e value)
+You shouldn't have to make too many guesses
+pico is in the flag, but not at the beginning
+
+First, I examine the ciphertext we are given. This looks similar to another CTF I've done
+called Mind Your Ps and Qs, which is RSA decryption.
+
+I found a script written in Java by a previous competitor, I wonder if it can be
+modified to fit this particular scenario. Let's hope.
+
+I install Java on my VM with the command:
+sudo apt install openjdk-17-jdk
+
+Verify with:
+java --version
+openjdk 17.0.9 2023-10-17
+OpenJDK Runtime Environment (build 17.0.9+9-Ubuntu-122.04)
+
+I run the program, but I am missing the value of phi.
+Let's search for previous writeups.
+I found a literal bear from Quebec who explains brute forcing with plaintexts on crypto.stackexchange.com
+
+Also, a wiki on padding schemes in RSA:
+https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Padding_schemes
+
+Also, another user on crypto.stackexchange.com "fgrieu" who maps out how to execute the decryption
+Found a sweet script on HHousen's GitHub, a previous competitor and modified to fit my N and c, e remains the same.
+
+Installed pip with the command:
+sudo apt install python3-pip
+
+Installed the required module with:
+pip install tqdm
+
+Ran the solution_script:
+Padding: 3533
+Flag: picoCTF{e_sh0u1d_b3_lArg3r_7adb35b1}
+
