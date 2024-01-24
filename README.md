@@ -1,1 +1,1 @@
-Lokkes Lair is my documented exploration of CTFs.
+Lokke's Lair is my documented exploration of CTFs.
